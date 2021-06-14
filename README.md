@@ -1,5 +1,8 @@
 # garden_variety
 
+> Forked from https://github.com/jonathanhefner/garden_variety with only one difference: 
+The error condition for the `create`, `update` & `destroy` controller actions will redirect back to the page that submitted the request (Instead of the action's view page). Apps that I have built generally have the `create`, `update` & `destroy` views discarded & this change facilitates that.
+
 Delightfully boring Rails controllers.  One of the superb advantages of
 Ruby on Rails is convention over configuration.  Opinionated default
 behavior can decrease development time and increase application
@@ -47,8 +50,8 @@ class PostsController < ApplicationController
       flash[:success] = flash_message(:success)
       redirect_to model
     else
-      flash.now[:error] = flash_message(:error)
-      render :new
+      flash[:error] = flash_message(:error)
+      redirect_back fallback_location: model
     end
   end
 
@@ -62,8 +65,8 @@ class PostsController < ApplicationController
       flash[:success] = flash_message(:success)
       redirect_to model
     else
-      flash.now[:error] = flash_message(:error)
-      render :edit
+      flash[:error] = flash_message(:error)
+      redirect_back fallback_location: model
     end
   end
 
@@ -73,8 +76,8 @@ class PostsController < ApplicationController
       flash[:success] = flash_message(:success)
       redirect_to action: :index
     else
-      flash.now[:error] = flash_message(:error)
-      render :show
+      flash[:error] = flash_message(:error)
+      redirect_back fallback_location: {action: :index}
     end
   end
 
@@ -513,13 +516,19 @@ from RailsConf which delves deeper into the principle:
 
 ## Installation
 
-Add the gem to your Gemfile:
+Add this line to your application's Gemfile:
 
-```bash
-$ bundle add garden_variety
+```ruby
+gem "garden_variety"
 ```
 
-And run the install generator:
+Then run:
+
+```bash
+$ bundle install
+```
+
+And finally, run the install generator:
 
 ```bash
 $ rails generate garden:install

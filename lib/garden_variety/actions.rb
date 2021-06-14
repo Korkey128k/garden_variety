@@ -41,8 +41,8 @@ module GardenVariety
         block_given? ? yield : redirect_to(model)
         flash.discard(:success) if REDIRECT_CODES.exclude?(response.status)
       else
-        flash.now[:error] = flash_message(:error)
-        render :new
+        flash[:error] = flash_message(:error)
+        redirect_back fallback_location: model
       end
     end
   end
@@ -68,8 +68,8 @@ module GardenVariety
         block_given? ? yield : redirect_to(model)
         flash.discard(:success) if REDIRECT_CODES.exclude?(response.status)
       else
-        flash.now[:error] = flash_message(:error)
-        render :edit
+        flash[:error] = flash_message(:error)
+        redirect_back fallback_location: model
       end
     end
   end
@@ -87,8 +87,8 @@ module GardenVariety
         block_given? ? yield : redirect_to(action: :index)
         flash.discard(:success) if REDIRECT_CODES.exclude?(response.status)
       else
-        flash.now[:error] = flash_message(:error)
-        render :show
+        flash[:error] = flash_message(:error)
+        redirect_back fallback_location: {action: :index}
       end
     end
   end
