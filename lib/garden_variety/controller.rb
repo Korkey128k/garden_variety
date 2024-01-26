@@ -268,7 +268,10 @@ module GardenVariety
     #
     # @return [Hash{Symbol => #to_s}]
     def flash_options
-      { model_name: self.class.model_name.human }
+      {
+        model_name: self.class.model_name.human,
+        error_messages: self.model.try(:errors).try(:full_messages).try(:to_sentence)
+      }
     end
 
     # @!visibility public
